@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import os
-from pylibrufus import IsoAnalyzer, BootloaderType, ResourceManager, resource_manager
+from pylibrufus import IsoAnalyzer, BootloaderType, resource_manager
 from pylibrufus import generate_bypass_xml, BypassOption, DownloadInstruction
 
 def main():
@@ -25,8 +25,6 @@ def main():
         is_windows = BootloaderType.WINDOWS in bootloaders or BootloaderType.UEFI in bootloaders
         # Simple heuristic: if it has bootmgr, it's likely Windows (or ReactOS masked)
         # But Linux can also have UEFI.
-        # Let's check for specific Windows markers or just assume Windows if not Linux
-
         # Better heuristic based on Rufus C code:
         is_linux = BootloaderType.SYSLINUX in bootloaders or BootloaderType.GRUB2 in bootloaders or BootloaderType.GRUB_LEGACY in bootloaders
 
@@ -61,10 +59,6 @@ def main():
                 # ldlinux.sys
                 print("Locating Syslinux resources...")
 
-                # Try to get ldlinux.sys compatible with detected version
-                # If version is unknown, we might default to 6.04 or 4.07 depending on... guess?
-                # Rufus src/rufus.c handles this by checking isolinux.bin version.
-
                 target_version = syslinux_version if syslinux_version != 'Unknown' else "6.04"
 
                 res_sys = resource_manager.get_resource_path("ldlinux.sys", target_version, syslinux_ext)
@@ -84,6 +78,19 @@ def main():
                     else:
                         print(f"   [LOCAL] Found {name} at: {res}")
                         print(f"   -> Copy to USB root or syslinux directory.")
+
+                print("\n3. Patch ldlinux.sys using physical sector map (Linux Only):")
+                print("   (Example Python Code to run after copying files)")
+                print("-" * 40)
+                print("from pylibrufus.linux_sectors import get_file_physical_sectors")
+                print("from pylibrufus.patcher import Patcher")
+                print(f"ldlinux_path = '/mnt/usb/ldlinux.sys'")
+                print(f"sectors = get_file_physical_sectors(ldlinux_path)")
+                print(f"patcher = Patcher()")
+                print(f"with open(ldlinux_path, 'rb') as f: content = f.read()")
+                print(f"patches = patcher.calculate_patches(ldlinux_path, content, sectors)")
+                print(f"# Apply patches...")
+                print("-" * 40)
 
         else:
             print("\n--- Unknown/Generic ISO Detected ---")

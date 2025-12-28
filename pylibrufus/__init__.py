@@ -2,6 +2,7 @@ from .iso_analyzer import IsoAnalyzer, BootloaderType
 from .patcher import Patcher
 from .win_bypass import generate_bypass_xml, get_bypass_registry_keys, BypassOption
 from .resource_manager import ResourceManager, DownloadInstruction
+from .linux_sectors import get_file_physical_sectors
 import os
 
 # Initialize ResourceManager with bundled resources

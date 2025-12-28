@@ -51,6 +51,17 @@ for k in keys:
     print(k)
 ```
 
+### linux_sectors.py (Linux Only)
+
+Retrieves physical disk sectors of a file, required for Syslinux patching.
+
+```python
+from pylibrufus.linux_sectors import get_file_physical_sectors
+
+sectors = get_file_physical_sectors("/mnt/usb/ldlinux.sys")
+print(f"File resides on sectors: {sectors}")
+```
+
 ## Dependencies
 
 * `pycdlib` (for ISO analysis)
