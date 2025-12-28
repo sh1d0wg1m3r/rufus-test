@@ -1,7 +1,7 @@
 from .iso_analyzer import IsoAnalyzer, BootloaderType
 from .patcher import Patcher
 from .win_bypass import generate_bypass_xml, get_bypass_registry_keys, BypassOption
-from .resource_manager import ResourceManager
+from .resource_manager import ResourceManager, DownloadInstruction
 import os
 
 # Initialize ResourceManager with bundled resources
